@@ -13,7 +13,7 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/Stratxgy/Roblox-Chams
 ```lua
 getgenv().chams = {
     Settings = {
-        Enabled = true,                     -- Enable or disable the highlighting
+        Enabled = false,                     -- Enable or disable the highlighting
         Color = {255, 0, 0},                -- RGB values for the fill color
         OutlineColor = {255, 255, 255},     -- RGB values for the outline color
         TeamCheck = false                   -- Enable or disable team check
@@ -24,7 +24,8 @@ getgenv().chams = {
 ## Example use of the Script
 ```lua
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Stratxgy/Roblox-Chams-Highlight/refs/heads/main/Highlight.lua"))() -- load the script
-getgenv().chams.Settings.Color = {0, 255, 0}
+getgenv().chams.Settings.Enabled = true
 getgenv().chams.Settings.TeamCheck = true
+getgenv().chams.Settings.Color = {0, 255, 0}
 getgenv().chams.Settings.OutlineColor = {255, 255, 255}
 ```
