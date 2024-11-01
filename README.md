@@ -1,6 +1,9 @@
 # Roblox-Chams-Highlight
 basic script that you can change outline aka chams ( using highlight function ) aswell as fill color of. no gui.
 
+> [!IMPORTANT]
+> Script is disabled by default. You must run getgenv().chams.Settings.Enabled = true to turn it on.
+
  --// Used in [untitled project](https://github.com/Stratxgy/Untitled-Project)
 ## Feel free to use this in a script.
 
