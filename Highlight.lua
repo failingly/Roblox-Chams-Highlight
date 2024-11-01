@@ -1,7 +1,7 @@
 -- Customizable Settings
 getgenv().chams = {
     Settings = {
-        Enabled = true,                     -- Enable or disable the highlighting
+        Enabled = false,                     -- Enable or disable the highlighting
         Color = {255, 0, 0},                -- RGB values for the fill color
         OutlineColor = {255, 255, 255},     -- RGB values for the outline color
         TeamCheck = false                   -- Enable or disable team check
