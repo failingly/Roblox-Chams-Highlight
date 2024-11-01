@@ -4,4 +4,4 @@ basic script that you can change outline aka chams ( using highlight function ) 
  --// Used in [untitled project](https://github.com/Stratxgy/Untitled-Project)
 ## Feel free to use this in a script.
 
-### note that this is really basic. I'm not a good coder.
+
