@@ -14,21 +14,21 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/Stratxgy/Roblox-Chams
 
 ## Configurable settings
 ```lua
-getgenv().chams = {
-    Settings = {
-        Enabled = false,                     -- Enable or disable the highlighting
-        Color = {255, 0, 0},                -- RGB values for the fill color
-        OutlineColor = {255, 255, 255},     -- RGB values for the outline color
-        TeamCheck = false                   -- Enable or disable team check
-    }
+local ChamsSettings = {
+    Enabled = false, -- Toggle chams on/off
+    TeamCheck = false, -- Enable or disable team checks
+    VisibleColor = Color3.fromRGB(255, 0, 0), -- Color when visible
+    HiddenColor = Color3.fromRGB(0, 255, 0), -- Color when hidden
+    FillTransparency = 0.5, -- Transparency of the fill
+    OutlineTransparency = 0, -- Transparency of the outline
 }
 ```
 
 ## Example use of the Script
 ```lua
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Stratxgy/Roblox-Chams-Highlight/refs/heads/main/Highlight.lua"))() -- load the script
-getgenv().chams.Settings.Enabled = true
-getgenv().chams.Settings.TeamCheck = true
-getgenv().chams.Settings.Color = {0, 255, 0}
-getgenv().chams.Settings.OutlineColor = {255, 255, 255}
+ChamsSettings.Enabled = true
+ChamsSettings.TeamCheck = true
+ChamsSettings.VisibleColor = Color3.fromRGB(0, 0, 255)
+ChamsSettings.HiddenColor = Color3.fromRGB(255, 255, 0)
 ```
