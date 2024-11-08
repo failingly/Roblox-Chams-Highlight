@@ -1,69 +1,90 @@
--- Customizable Settings
-getgenv().chams = {
-    Settings = {
-        Enabled = false,                     -- Enable or disable the highlighting
-        Color = {255, 0, 0},                -- RGB values for the fill color
-        OutlineColor = {255, 255, 255},     -- RGB values for the outline color
-        TeamCheck = false                   -- Enable or disable team check
-    }
+local ChamsSettings = {
+    Enabled = false, -- Toggle chams on/off
+    TeamCheck = false, -- Enable or disable team checks
+    VisibleColor = Color3.fromRGB(255, 0, 0), -- Color when visible
+    HiddenColor = Color3.fromRGB(0, 255, 0), -- Color when hidden
+    FillTransparency = 0.5, -- Transparency of the fill
+    OutlineTransparency = 0, -- Transparency of the outline
 }
 
--- Function to highlight a player's character
-local function highlightPlayer(player)
-    if player.Character and getgenv().chams.Settings.Enabled then
-        -- Team Check (optional)
-        if getgenv().chams.Settings.TeamCheck and player.Team == game.Players.LocalPlayer.Team then
-            return
-        end
-        
-        -- Check if a Highlight already exists to avoid duplicates
-        if not player.Character:FindFirstChildOfClass("Highlight") then
-            local highlight = Instance.new("Highlight")
-            highlight.Adornee = player.Character
-            
-            -- Apply FillColor from settings
-            local color = getgenv().chams.Settings.Color
-            highlight.FillColor = Color3.fromRGB(color[1], color[2], color[3])
+local client = game.Players.LocalPlayer
+local players = game:GetService("Players")
+local rs = game:GetService("RunService")
 
-            -- Apply OutlineColor from settings
-            local outlineColor = getgenv().chams.Settings.OutlineColor
-            highlight.OutlineColor = Color3.fromRGB(outlineColor[1], outlineColor[2], outlineColor[3])
-            
-            highlight.Parent = player.Character
-        end
+-- Function to check if a player is on the same team
+local function isOnSameTeam(player)
+    if not ChamsSettings.TeamCheck then
+        return false -- Ignore teams if TeamCheck is disabled
     end
+    return player.Team == client.Team
 end
 
--- Highlight all players currently in the game
-for _, player in pairs(game.Players:GetPlayers()) do
-    highlightPlayer(player)
-end
+-- Function to create chams for a character
+local function createChams(character, player)
+    if not ChamsSettings.Enabled or isOnSameTeam(player) then return end
 
--- Set up a listener to highlight new players who join
-game.Players.PlayerAdded:Connect(function(player)
-    player.CharacterAdded:Connect(function()
-        highlightPlayer(player)
-    end)
-end)
+    local highlight = Instance.new("Highlight")
+    highlight.Name = "Chams"
+    highlight.Parent = character
+    highlight.FillTransparency = ChamsSettings.FillTransparency
+    highlight.OutlineTransparency = ChamsSettings.OutlineTransparency
+    highlight.OutlineColor = Color3.new(0, 0, 0)
+    highlight.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
 
--- Update highlights if a player respawns
-game.Players.PlayerRemoving:Connect(function(player)
-    if player.Character then
-        local highlight = player.Character:FindFirstChildOfClass("Highlight")
-        if highlight then
+    -- Update visibility based on occlusion
+    local function updateVisibility()
+        if character:FindFirstChild("Head") and character.Head:IsDescendantOf(workspace) then
+            local isVisible = workspace.CurrentCamera:WorldToViewportPoint(character.Head.Position).Z > 0
+            highlight.FillColor = isVisible and ChamsSettings.VisibleColor or ChamsSettings.HiddenColor
+        else
             highlight:Destroy()
         end
     end
-end)
 
--- Connect to the CharacterAdded event to handle respawning players
-game.Players.PlayerAdded:Connect(function(player)
-    player.CharacterAdded:Connect(function()
-        highlightPlayer(player)
+    local connection
+    connection = rs.RenderStepped:Connect(function()
+        if not character:IsDescendantOf(workspace) or not ChamsSettings.Enabled then
+            highlight:Destroy()
+            connection:Disconnect()
+        else
+            updateVisibility()
+        end
     end)
-end)
+end
 
--- Ensure highlights are applied when the player respawns
-game.Players.LocalPlayer.CharacterAdded:Connect(function(character)
-    highlightPlayer(game.Players.LocalPlayer)
-end)
+-- Handle existing and new players
+local function setupPlayer(player)
+    if player == client then return end
+
+    if player.Character then
+        createChams(player.Character, player)
+    end
+
+    player.CharacterAdded:Connect(function(character)
+        createChams(character, player)
+    end)
+end
+
+-- Check for players already in the game
+local function initializeChams()
+    for _, player in ipairs(players:GetPlayers()) do
+        setupPlayer(player)
+    end
+    -- Listen for new players
+    players.PlayerAdded:Connect(setupPlayer)
+end
+
+-- Check for players and characters that spawn later
+local function monitorCharacters()
+    rs.Heartbeat:Connect(function()
+        for _, player in ipairs(players:GetPlayers()) do
+            if player ~= client and player.Character and not player.Character:FindFirstChild("Chams") then
+                createChams(player.Character, player)
+            end
+        end
+    end)
+end
+
+-- Initialize
+initializeChams()
+monitorCharacters()
