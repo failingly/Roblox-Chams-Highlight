@@ -1,7 +1,7 @@
 #  Make sure to drop a ⭐ if you liked the script
 basic script that you can change outline aka chams ( using highlight function ) aswell as fill color of. no gui.
 
- --// Used in [untitled project](https://github.com/Stratxgy/Untitled-Project)
+ --// Used in aura
 ## Feel free to use this in a script.
 
 ## Load the script
