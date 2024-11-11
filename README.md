@@ -11,7 +11,7 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/Stratxgy/Roblox-Chams
 
 ## Configurable settings
 ```lua
-local ChamsSettings = {
+getgenv().ChamsSettings = {
     Enabled = false, -- Toggle chams on/off
     TeamCheck = false, -- Enable or disable team checks
     VisibleColor = Color3.fromRGB(255, 0, 0), -- Color when visible
