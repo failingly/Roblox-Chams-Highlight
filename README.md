@@ -12,10 +12,10 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/Stratxgy/Roblox-Chams
 ## Configurable settings
 ```lua
 getgenv().chams = {
-    enabled = false,  -- Whether highlights are enabled
-    teamcheck = false,  -- Whether to apply highlights based on the player's team
-    fillcolor = Color3.fromRGB(255, 0, 4),  -- Default fill color (red)
-    outlinecolor = Color3.fromRGB(255, 255, 255)  -- Default outline color (white)
+    enabled = false, -- Toggle the chams feature
+    outlineColor = Color3.fromRGB(0, 0, 0), -- White outline
+    fillTransparency = 0, -- Make the inside of the outline transparent
+    outlineTransparency = 0 -- Make the outline fully visible
 }
 ```
 > [!IMPORTANT]
