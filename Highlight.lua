@@ -1,11 +1,12 @@
-
+-- Add settings using getgenv()
 getgenv().chams = {
     enabled = false, -- Toggle the chams feature
-    outlineColor = Color3.fromRGB(0, 0, 0), -- White outline
-    fillTransparency = 0, -- Make the inside of the outline transparent
-    outlineTransparency = 0 -- Make the outline fully visible
+    outlineColor = Color3.fromRGB(255, 255, 255),
+    fillColor = Color3.fromRGB(0, 0, 0)
+    fillTransparency = 1, 
+    outlineTransparency = 0 
 }
-
+    
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 
@@ -13,6 +14,7 @@ local function createHighlight(character)
     local highlight = Instance.new("Highlight")
     highlight.Adornee = character
     highlight.FillTransparency = getgenv().chams.fillTransparency -- Use setting for transparency
+    highlight.FillColor = getgenv().chams.fillColor -- Use setting for fill color
     highlight.OutlineColor = getgenv().chams.outlineColor -- Use setting for outline color
     highlight.OutlineTransparency = getgenv().chams.outlineTransparency -- Use setting for outline transparency
     highlight.Parent = character
