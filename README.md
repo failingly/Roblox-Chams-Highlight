@@ -12,11 +12,12 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/Stratxgy/Roblox-Chams
 ## Configurable settings
 ```lua
 getgenv().chams = {
-    enabled = false, -- Toggle the chams feature
+    enabled = false, 
     outlineColor = Color3.fromRGB(255, 255, 255),
-    fillColor = Color3.fromRGB(0, 0, 0)
-    fillTransparency = 1, 
-    outlineTransparency = 0 
+    fillColor = Color3.fromRGB(0, 0, 0),
+    fillTransparency = 1,
+    outlineTransparency = 0, 
+    teamCheck = false 
 }
 ```
 > [!IMPORTANT]
