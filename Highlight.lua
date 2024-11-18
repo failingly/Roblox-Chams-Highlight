@@ -1,21 +1,19 @@
 
 getgenv().chams = {
     enabled = false, 
-    outlineColor = Color3.fromRGB(255, 255, 255), 
-    fillColor = Color3.fromRGB(0, 0, 0),
-    fillTransparency = 1,
-    outlineTransparency = 0,
+    outlineColor = Color3.fromRGB(255, 255, 255),
+    fillColor = Color3.fromRGB(0, 0, 0), 
+    fillTransparency = 1, 
+    outlineTransparency = 0, 
     teamCheck = false 
 }
 
 
 
-if not getgenv().chams.enabled then
-    return
-end
 
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
+local activeHighlights = {} 
 
 local function isOnSameTeam(player)
     if getgenv().chams.teamCheck then
@@ -27,46 +25,89 @@ end
 local function createHighlight(character)
     local highlight = Instance.new("Highlight")
     highlight.Adornee = character
-    highlight.FillTransparency = getgenv().chams.fillTransparency -- Use setting for transparency
-    highlight.FillColor = getgenv().chams.fillColor -- Use setting for fill color
-    highlight.OutlineColor = getgenv().chams.outlineColor -- Use setting for outline color
-    highlight.OutlineTransparency = getgenv().chams.outlineTransparency -- Use setting for outline transparency
+    highlight.FillTransparency = getgenv().chams.fillTransparency
+    highlight.FillColor = getgenv().chams.fillColor
+    highlight.OutlineColor = getgenv().chams.outlineColor
+    highlight.OutlineTransparency = getgenv().chams.outlineTransparency
     highlight.Parent = character
     return highlight
 end
 
-local function onCharacterAdded(character, player)
-
-    if isOnSameTeam(player) then
-        return
+local function removeHighlight(character)
+    local highlight = character:FindFirstChildOfClass("Highlight")
+    if highlight then
+        highlight:Destroy()
     end
-
-
-    if character:FindFirstChildOfClass("Highlight") then
-        character:FindFirstChildOfClass("Highlight"):Destroy()
-    end
-
-    createHighlight(character)
 end
 
-local function trackPlayer(player)
-    if player == LocalPlayer then return end
+local function applyHighlight(player)
+    if player == LocalPlayer or isOnSameTeam(player) then return end
 
-    -- Connect to CharacterAdded event
+    local character = player.Character
+    if character then
+        removeHighlight(character) 
+        local highlight = createHighlight(character)
+        activeHighlights[player] = highlight
+    end
+end
+
+local function removeAllHighlights()
+    for player, _ in pairs(activeHighlights) do
+        if player.Character then
+            removeHighlight(player.Character)
+        end
+    end
+    activeHighlights = {}
+end
+
+local function monitorPlayers()
+
+    for _, player in ipairs(Players:GetPlayers()) do
+        if getgenv().chams.enabled then
+            applyHighlight(player)
+        else
+            if player.Character then
+                removeHighlight(player.Character)
+            end
+        end
+    end
+end
+
+
+local function onPlayerAdded(player)
     player.CharacterAdded:Connect(function(character)
-        onCharacterAdded(character, player)
+        if getgenv().chams.enabled then
+            applyHighlight(player)
+        end
     end)
 
-
-    if player.Character then
-        onCharacterAdded(player.Character, player)
+    if player.Character and getgenv().chams.enabled then
+        applyHighlight(player)
     end
 end
+
+local function onPlayerRemoving(player)
+    if player.Character then
+        removeHighlight(player.Character)
+    end
+    activeHighlights[player] = nil
+end
+
+
+task.spawn(function()
+    while task.wait(0.5) do
+        if getgenv().chams.enabled then
+            monitorPlayers()
+        else
+            removeAllHighlights()
+        end
+    end
+end)
 
 
 for _, player in ipairs(Players:GetPlayers()) do
-    trackPlayer(player)
+    onPlayerAdded(player)
 end
 
-
-Players.PlayerAdded:Connect(trackPlayer)
+Players.PlayerAdded:Connect(onPlayerAdded)
+Players.PlayerRemoving:Connect(onPlayerRemoving)
