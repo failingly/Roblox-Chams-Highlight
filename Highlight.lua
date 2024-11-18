@@ -1,16 +1,16 @@
 
 getgenv().chams = {
-    enabled = false, -- Toggle the chams feature
-    outlineColor = Color3.fromRGB(255, 255, 255), -- White outline
-    fillColor = Color3.fromRGB(0, 0, 0), -- Black fill (default, can be changed)
-    fillTransparency = 1, -- Make the inside of the outline transparent
-    outlineTransparency = 0, -- Make the outline fully visible
-    teamCheck = false -- Toggle team checking (true = skip highlighting teammates)
+    enabled = false, 
+    outlineColor = Color3.fromRGB(255, 255, 255), 
+    fillColor = Color3.fromRGB(0, 0, 0),
+    fillTransparency = 1,
+    outlineTransparency = 0,
+    teamCheck = false 
 }
 
--- Ensure the script does nothing if chams are disabled
+
+
 if not getgenv().chams.enabled then
-    print("Aura Loaded!")
     return
 end
 
@@ -36,12 +36,12 @@ local function createHighlight(character)
 end
 
 local function onCharacterAdded(character, player)
-    -- Skip highlighting teammates if teamCheck is enabled
+
     if isOnSameTeam(player) then
         return
     end
 
-    -- Ensure any existing highlight is removed to prevent duplicates
+
     if character:FindFirstChildOfClass("Highlight") then
         character:FindFirstChildOfClass("Highlight"):Destroy()
     end
