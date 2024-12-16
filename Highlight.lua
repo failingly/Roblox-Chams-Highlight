@@ -95,7 +95,7 @@ end
 
 
 task.spawn(function()
-    while task.wait(0.5) do
+    while task.wait(0.1) do
         if getgenv().chams.enabled then
             monitorPlayers()
         else
