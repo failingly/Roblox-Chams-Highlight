@@ -1,6 +1,3 @@
-#  Make sure to drop a ⭐ if you liked the script
-basic script that you can change outline aka chams ( using highlight function ) aswell as fill color of. no gui.
-
  --// Used in aura
 ## Feel free to use this in a script.
 
@@ -21,7 +18,7 @@ getgenv().chams = {
 }
 ```
 > [!IMPORTANT]
-> Script is disabled by default. You must run chams.enabled = true to turn it on.
+> Script is disabled by default. You must run chams.enabled = true to turn it on automatically.
 
 ## Example use of the Script
 ```lua
