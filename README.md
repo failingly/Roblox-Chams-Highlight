@@ -1,4 +1,3 @@
- --// Used in aura
 ## Feel free to use this in a script.
 
 ## Load the script
